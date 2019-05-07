@@ -197,8 +197,9 @@ module ActiveMessaging
       end
 
       def prepare_application
-        if defined? Rails
-          # Dispatcher.prepare_application_for_dispatch
+        if ActiveRecord::VERSION::MAJOR >= 4
+          ActiveRecord::Base.connection_pool.connections.map(&:verify!)
+        else
           ActiveRecord::Base.verify_active_connections!
         end
       end
